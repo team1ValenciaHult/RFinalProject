@@ -139,12 +139,39 @@ Q3_struc <- Q3_df %>%
   count(word, sort=TRUE)
 print(Q3_struc)
 
+#####################################Q3 single, not singe
+Q3_struc_single <- my_df %>%
+  filter(goal==1, variable=="V3")%>%
+  unnest_tokens(word, value) %>%
+  count(word, sort=TRUE)
+print(Q3_struc_single)
+
+Q3_struc_nsingle <- my_df %>%
+  filter(goal==0, variable=="V3")%>%
+  unnest_tokens(word, value) %>%
+  count(word, sort=TRUE)
+print(Q3_struc_nsingle)
+
+
 # Tokenize question 4, remove stop words, and count
 Q4_struc <- Q4_df %>%
   unnest_tokens(word, text) %>%
   anti_join(stop_words) %>% #here's where we remove tokens
   count(word, sort=TRUE)
 print(Q4_struc)
+
+#####################################Q4 single, not singe
+Q4_struc_single <- my_df %>%
+  filter(goal==1, variable=="V4")%>%
+  unnest_tokens(word, value) %>%
+  count(word, sort=TRUE)
+print(Q4_struc_single)
+
+Q4_struc_nsingle <- my_df %>%
+  filter(goal==0, variable=="V4")%>%
+  unnest_tokens(word, value) %>%
+  count(word, sort=TRUE)
+print(Q4_struc_nsingle)
 
 # Tokenize question 5, remove stop words, and count
 Q5_struc <- Q5_df %>%
@@ -153,6 +180,19 @@ Q5_struc <- Q5_df %>%
   count(word, sort=TRUE)
 print(Q5_struc)
 
+#####################################Q5 single, not singe
+Q5_struc_single <- my_df %>%
+  filter(goal==1, variable=="V5")%>%
+  unnest_tokens(word, value) %>%
+  count(word, sort=TRUE)
+print(Q5_struc_single)
+
+Q5_struc_nsingle <- my_df %>%
+  filter(goal==0, variable=="V5")%>%
+  unnest_tokens(word, value) %>%
+  count(word, sort=TRUE)
+print(Q5_struc_nsingle)
+
 # Tokenize question 6, remove stop words, and count
 Q6_struc <- Q6_df %>%
   unnest_tokens(word, text) %>%
@@ -160,6 +200,18 @@ Q6_struc <- Q6_df %>%
   count(word, sort=TRUE)
 print(Q6_struc)
 
+#####################################Q6 single, not singe
+Q6_struc_single <- my_df %>%
+  filter(goal==1, variable=="V6")%>%
+  unnest_tokens(word, value) %>%
+  count(word, sort=TRUE)
+print(Q6_struc_single)
+
+Q6_struc_nsingle <- my_df %>%
+  filter(goal==0, variable=="V6")%>%
+  unnest_tokens(word, value) %>%
+  count(word, sort=TRUE)
+print(Q6_struc_nsingle)
 ########################################################################################################
 
 all_merged_survey <- bind_rows(
@@ -171,6 +223,22 @@ all_merged_survey <- bind_rows(
   mutate(Q6_struc, question = 'Q6')
 )
 
+all_merged_single <- bind_rows(
+  mutate(Q2_struc_single, success = 'Q2_single'),
+  mutate(Q3_struc_single, success = 'Q3_single'),
+  mutate(Q4_struc_single, success = 'Q4_single'),
+  mutate(Q5_struc_single, success = 'Q5_single'),
+  mutate(Q6_struc_single, success = 'Q6_single')
+ 
+)
+
+all_merged_nsingle <- bind_rows(
+  mutate(Q2_struc_nsingle, success = 'Q2_not_single'),
+  mutate(Q3_struc_nsingle, success = 'Q3_single_not_single'),
+  mutate(Q4_struc_nsingle, success = 'Q4_not_single'),
+  mutate(Q5_struc_nsingle, success = 'Q5_not_single'),
+  mutate(Q6_struc_nsingle, success = 'Q6_not_single')
+)
 
 merged_survey_dtm <- all_merged_survey %>% 
   cast_dtm(question, word, n)
@@ -225,8 +293,52 @@ all_merged_survey # we get all the zeors because we are looking at stop words ..
 
 all_merged_survey %>%
   arrange(desc(tf_idf))
-#what can we say about these words?
 
+
+######################################
+#tf_idf single, not single by question from question 2 to 6
+all_merged_single <- all_merged_single %>%
+  bind_tf_idf(word, success, n) # we need to add location information - in this case book
+
+all_merged_single # we get all the zeors because we are looking at stop words ... too common
+
+all_merged_single %>%
+  arrange(desc(tf_idf))
+###########tf_idf graph
+all_merged_single %>%
+  arrange(desc(tf_idf)) %>%
+  mutate(word=factor(word, levels=rev(unique(word)))) %>%
+  group_by(success) %>%
+  top_n(5) %>%
+  ungroup %>%
+  ggplot(aes(word, tf_idf, fill=success))+
+  geom_col(show.legend=FALSE)+
+  labs(x=NULL, y="tf-idf")+
+  facet_wrap(~success, ncol=2, scales="free")+
+  coord_flip()
+
+
+######################################
+#tf_idf not single by question from question 2 to 6
+all_merged_nsingle <- all_merged_nsingle %>%
+  bind_tf_idf(word, success, n) # we need to add location information - in this case book
+
+all_merged_nsingle # we get all the zeors because we are looking at stop words ... too common
+
+all_merged_nsingle %>%
+  arrange(desc(tf_idf))
+###########tf_idf graph
+all_merged_nsingle %>%
+  arrange(desc(tf_idf)) %>%
+  mutate(word=factor(word, levels=rev(unique(word)))) %>%
+  group_by(success) %>%
+  top_n(5) %>%
+  ungroup %>%
+  ggplot(aes(word, tf_idf, fill=success))+
+  geom_col(show.legend=FALSE)+
+  labs(x=NULL, y="tf-idf")+
+  facet_wrap(~success, ncol=2, scales="free")+
+  coord_flip()
 #############
 # looking at the graphical apprach:
 all_merged_survey %>%
