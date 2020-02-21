@@ -117,12 +117,11 @@ not_single_struc %>%
 
 # Chantal TFIDF  ----------------------------------------------------------------
 
-all_merged_survey %>% str()
 
 my_df %>% 
 unnest_tokens(word, value) %>%
   anti_join(stop_words) %>% #here's where we remove tokens
-  count(word,ID, sort = TRUE) %>% View()
+  count(word,questions, sort = TRUE) %>% View('myWay')
 
 
 #tf_idf single, not single by question from question 2 to 6
