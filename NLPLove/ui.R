@@ -36,11 +36,12 @@ ui <- dashboardPage(
                     # Content
                     mainPanel(box(
                         title = "How does the Data Science Wingman/Wingwoman app work?", width = 10, background = "light-blue",
-                        "This app is designed for data scientist wingmen/wingwomen. 
-                        The candidate for love is required to answer multiple of the following questions below. 
-                        The wingman/wingwoman will have to write to go to the 'Naive Bayes Classification' tab and 
+                        "This app is designed for wingmen/wingwomen data scientists. The wingman/wingwoman will have to go to the 'Naive Bayes Classification' tab and 
                         input what the candidate for love is answering. The wingman/wingwoman can also explore the 
-                        other tabs for insights of the analysis. ")),
+                        other tabs for insights of the analysis."),
+                        box(width = 10, background = "light-blue",
+                            "The candidate for love is required to answer at least 1 of the following questions "
+                         )),
                     verticalLayout(box('1. How often do yo go out?',width = 5, background = "green"),
                              box('2. What do yo do on your free time?',width = 5, background = "green"),
                              box('3. How is your relationship with your parents?',width = 5, background = "green"),
