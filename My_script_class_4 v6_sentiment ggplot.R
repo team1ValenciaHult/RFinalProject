@@ -77,7 +77,7 @@ single_struc %>%
   ggplot(aes(word, n, fill=sentiment)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~sentiment, scales = "free_y")+
-  labs(y="Single sentiment nrc", x=NULL)+
+  labs(y="", x=NULL)+
   coord_flip()
 
 # Single nrc wordcloud
@@ -107,7 +107,7 @@ not_single_struc %>%
   ggplot(aes(word, n, fill=sentiment)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~sentiment, scales = "free_y")+
-  labs(y="Not single sentiment nrc", x=NULL)+
+  labs(y="", x=NULL)+
   coord_flip()
 
 # Not single nrc wordcloud
