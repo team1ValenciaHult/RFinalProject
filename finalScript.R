@@ -478,7 +478,9 @@ forWordCloud2$freq <- (forWordCloud$freq*10)^2
 
 head(forWordCloud2)
 
-wordcloud2(forWordCloud2, shuffle = FALSE, shape = 'cardioid')
+wordcloud2(forWordCloud2, 
+           shuffle = FALSE, 
+           shape = 'cardioid')
 
 ?wordcloud2
 # predicting the testing data
