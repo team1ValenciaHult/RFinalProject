@@ -55,11 +55,11 @@ ui <- dashboardPage(
             tabItem(tabName = "sentiment",
                     h2("Sentiment Analysis"),
                     # Content
-                    sidebarPanel(selectInput("selectPlotWordCloud", 
+                    mainPanel(selectInput("selectPlotWordCloud", 
                                           "Choose desired relationship status", 
                                           choices = c("single",
-                                                      "notSingle"))), 
-                    mainPanel( plotOutput("wordCloud", width = '800px', height = '500px'))),
+                                                      "notSingle")), 
+                    plotOutput("wordCloud", width = '800px', height = '500px'))),
                     
                     
             # Third Tab Content
@@ -67,11 +67,11 @@ ui <- dashboardPage(
             tabItem(tabName = "TFIDF",
                     h2("TFIDF Analysis"),
                     # Content 
-                    sidebarPanel(selectInput("selectPlotTFIDF", 
+                    mainPanel(selectInput("selectPlotTFIDF", 
                                           "Choose desired relationship status", 
                                           choices = c("single",
-                                                      "notSingle"))), 
-                     mainPanel(plotOutput("TFIDF", width = '800px', height = '800px'))),
+                                                      "notSingle")), 
+                     plotOutput("TFIDF", width = '800px', height = '550px'))),
             
             # Fourth Tab Content
             
@@ -81,7 +81,7 @@ ui <- dashboardPage(
                                           "Choose desired relationship status", 
                                           choices = c("single",
                                                       "notSingle")), 
-                              plotOutput("bigram", width = '800px', height = '800px'))),
+                              plotOutput("bigram", width = '800px', height = '550px'))),
             
             # Fifth Tab Content
             
@@ -97,7 +97,7 @@ ui <- dashboardPage(
             
             tabItem(tabName = "conclusion",
                     h2("Conclusion"),
-                    div(img(src="conclusion.jpeg")))
+                    div(img(src="conclusion.jpeg",height = '650',width = '800')))
                     # mainPanel(imageOutput("conclusion")))
             
             )
