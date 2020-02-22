@@ -60,7 +60,8 @@ my_df_raw[grep('no',  my_df_raw$V1), 'V1'] <- 0
 # my_df %>% melt(., 'ID') %>% View()
 # Transforming DF to long format
 
-melt(my_df_raw,id.vars = c('ID','V1')) %>% View('melted')
+melt(my_df_raw,id.vars = c('ID','V1')) %>% 
+  View('melted')
 
 
 my_df <- melt(my_df_raw,id.vars = c('ID','V1'))
@@ -475,7 +476,11 @@ pred <- predict(NB_classifier, msg.dfm.test)
 
 opinions = Corpus(VectorSource('I like pina colada'))
 userInputDfm <- dfm(corpus(opinions), tolower = TRUE)
-predict(NB_classifier, userInputDfm, force = TRUE)
+pred<- predict(NB_classifier, userInputDfm, force = TRUE)
+
+ifelse(pred == '0', 'Taken :(', 'SINGLE!!! :)')
+
+pred %>% as.character() %>% writeLines()
 # compare the predict and actual
 result <- data_frame(pred)
 result$actual <- naive_df[c(c(nrow(msg.dfm)-test_rows+1):nrow(msg.dfm)),'goal']
