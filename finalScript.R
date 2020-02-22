@@ -12,7 +12,7 @@ library(scales)
 library(wordcloud)
 library(igraph)
 library(ggraph)
-
+library(wordcloud2)
 
 
 # Reading Data ------------------------------------------------------------
@@ -461,16 +461,26 @@ word_prob <- data.frame(t(word_prob)) %>%
               )
 word_prob$words <- row.names(word_prob) 
 
-word_prob %>% View('notMelt')
+
 word_prob_melt <- word_prob %>% melt() 
 forWordCloud<- word_prob[,c('single','words')]
+
 forWordCloud <- forWordCloud %>% 
    rename(
      word = words,
      freq = single
           )
 
-wordcloud2(forWordCloud)
+forWordCloud2 <- forWordCloud[c(2,1)]
+
+forWordCloud2$freq <- (forWordCloud$freq*10)^2
+
+
+head(forWordCloud2)
+
+wordcloud2(forWordCloud2, shuffle = FALSE, shape = 'cardioid')
+
+?wordcloud2
 # predicting the testing data
 pred <- predict(NB_classifier, msg.dfm.test)
 
