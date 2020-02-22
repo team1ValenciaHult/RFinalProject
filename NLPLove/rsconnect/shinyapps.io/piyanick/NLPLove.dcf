@@ -1,0 +1,12 @@
+name: NLPLove
+title: NLPLove
+username:
+account: piyanick
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1849136
+bundleId: 2820535
+url: https://piyanick.shinyapps.io/NLPLove/
+when: 1582404119.69643
+asMultiple: FALSE
+asStatic: FALSE

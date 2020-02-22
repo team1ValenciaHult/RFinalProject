@@ -1,0 +1,12 @@
+name: NLPLove
+title: NLPLove
+username:
+account: dataminingapps
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1847885
+bundleId: 2819810
+url: https://dataminingapps.shinyapps.io/NLPLove/
+when: 1582362220.09523
+asMultiple: FALSE
+asStatic: FALSE
