@@ -2,9 +2,7 @@
 library(textreadr)
 library(dplyr)
 library(stringr)
-library(tidytext)
 library(topicmodels)
-library(tidytext)
 library(ggplot2)
 library(dplyr)
 library(reshape2)
@@ -16,6 +14,7 @@ library(ggraph)
 library(quanteda)
 library(tm)
 library(textdata)
+library(readr)
 
 
 
@@ -23,9 +22,12 @@ library(textdata)
 par(mar=c(0,0,0,0))
 
 
+# Reading Sentiments ------------------------------------------------------
+
+
 # Reading the txt document
 survey_answer <- read_document(file="testdocument.txt")
-
+nrcSentiments <-read_csv('nrcSentiments.csv')
 
 # Creating the dataframe
 a <- 25 #how many observations to you have
@@ -94,7 +96,7 @@ my_df$questions
 single_struc <- my_df %>%
     filter(goal==1) %>%
     unnest_tokens(word, value) %>%
-    inner_join(get_sentiments("nrc"))%>%
+    inner_join(nrcSentiments)%>%
     anti_join(stop_words) %>%
     count(word, sentiment, sort = TRUE)%>%
     ungroup()
@@ -107,7 +109,7 @@ wordcloud_single <- single_struc %>%
     ggplot(aes(word, n, fill=sentiment)) +
     geom_col(show.legend = FALSE) +
     facet_wrap(~sentiment, scales = "free_y")+
-    labs(y="Single sentiment nrc", x=NULL)+
+    labs(y="Single sentiment", x=NULL)+
     labs(x=NULL, y="")+
     coord_flip()
 
@@ -119,7 +121,7 @@ wordcloud_single <- single_struc %>%
 not_single_struc <- my_df %>%
     filter(goal==0) %>%
     unnest_tokens(word, value) %>%
-    inner_join(get_sentiments("nrc"))%>%
+    inner_join(nrcSentiments)%>%
     anti_join(stop_words) %>%
     count(word, sentiment, sort = TRUE) %>%
     ungroup()
@@ -132,7 +134,7 @@ wordcloud_nsingle <- not_single_struc %>%
     ggplot(aes(word, n, fill=sentiment)) +
     geom_col(show.legend = FALSE) +
     facet_wrap(~sentiment, scales = "free_y")+
-    labs(y="Not single sentiment nrc", x=NULL)+
+    labs(y="Not single sentiments", x=NULL)+
     labs(x=NULL, y="")+
     coord_flip()
 
