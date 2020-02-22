@@ -407,35 +407,65 @@ bigram_tf_idf %>%
 library(quanteda)
 library(tm)
 
-# create corpus
-opinions = Corpus(VectorSource(my_df$value))
 
-View(opinions)
+# Tokenize and remove stopwords
+naive_df <- my_df %>% 
+            unnest_tokens(word, value) %>% 
+            anti_join(stop_words)
+
+
+# Random the order before put it in the model
+# Set seed
+set.seed(42)
+
+# Shuffle row indices: rows
+rows <- sample(nrow(naive_df))
+
+# Randomly order data
+naive_df <- naive_df[rows, ]
+
+# create corpus
+opinions = Corpus(VectorSource(naive_df$word))
+
 
 
 msg.dfm <- dfm(corpus(opinions), tolower = TRUE) #generating document 
 msg.dfm <- dfm_trim(msg.dfm, min_termfreq = 2, min_docfreq = 1)
 msg.dfm <- dfm_weight(msg.dfm)
 
-nrow(msg.dfm)
+
+# Set the amount of test set
+test_rows <- 5
+
 #let's split the docs into training and testing data
-msg.dfm.train<-msg.dfm[c(1:123),]
-msg.dfm.test<-msg.dfm[c(124,125),]
+msg.dfm.train<-msg.dfm[c(1:c(nrow(msg.dfm)-test_rows)),]
+msg.dfm.test<-msg.dfm[c(c(nrow(msg.dfm)-test_rows+1):nrow(msg.dfm)),]
 
-# goal <- rep(c(1,0,1,1,1,0,0,1,0,1,1,0,1,0,1,0,1,0,0,1,1,1,1), times = 5)
 
-my_df$goal <- as.numeric(my_df$goal)
+naive_df$goal <- as.numeric(naive_df$goal)
 
-my_df$goal %>% str()
+naive_df$goal %>% str()
+
 #building the Naive Bayes model:
-NB_classifier <- textmodel_nb(msg.dfm.train, goal[c(1:123)])
-NB_classifier <- textmodel_nb(msg.dfm.train, my_df[c(1:123),'goal'])
-NB_classifier
+# NB_classifier <- textmodel_nb(msg.dfm.train, goal[c(1:123)])
+NB_classifier <- textmodel_nb(msg.dfm.train, naive_df[c(1:c(nrow(msg.dfm)-test_rows)),'goal'])
 summary(NB_classifier)
 
+# Put the probability of each words in a dataframe
+word_prob <- NB_classifier[[3]]
+word_prob <- data.frame(t(word_prob)) %>% 
+              rename(
+                not_single = X0,
+                single = X1
+              )
+
+
+
 # predicting the testing data
-pred <- predict(NB_classifier, msg.dfm.test, type = "probability")
+pred <- predict(NB_classifier, msg.dfm.test)
 pred
 
-
+# compare the predict and actual
+result <- data_frame(pred)
+result$actual <- naive_df[c(c(nrow(msg.dfm)-test_rows+1):nrow(msg.dfm)),'goal']
 
