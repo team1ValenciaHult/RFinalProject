@@ -430,7 +430,7 @@ opinions = Corpus(VectorSource(naive_df$word))
 
 
 msg.dfm <- dfm(corpus(opinions), tolower = TRUE) #generating document 
-msg.dfm <- dfm_trim(msg.dfm, min_termfreq = 2, min_docfreq = 1)
+msg.dfm <- dfm_trim(msg.dfm, min_termfreq = 1, min_docfreq = 1)
 msg.dfm <- dfm_weight(msg.dfm)
 
 
@@ -458,14 +458,26 @@ word_prob <- data.frame(t(word_prob)) %>%
                 not_single = X0,
                 single = X1
               )
+word_prob$words <- row.names(word_prob) 
 
+word_prob %>% View('notMelt')
+word_prob_melt <- word_prob %>% melt() 
+forWordCloud<- word_prob[,c('single','words')]
+forWordCloud <- forWordCloud %>% 
+   rename(
+     word = words,
+     freq = single
+          )
 
-
+wordcloud2(forWordCloud)
 # predicting the testing data
 pred <- predict(NB_classifier, msg.dfm.test)
-pred
 
+opinions = Corpus(VectorSource('I like pina colada'))
+userInputDfm <- dfm(corpus(opinions), tolower = TRUE)
+predict(NB_classifier, userInputDfm, force = TRUE)
 # compare the predict and actual
 result <- data_frame(pred)
 result$actual <- naive_df[c(c(nrow(msg.dfm)-test_rows+1):nrow(msg.dfm)),'goal']
 
+result
