@@ -253,7 +253,7 @@ singleBigram<- ggraph(bigram_graph1, layout = "fr") +
     geom_edge_link()+
     geom_node_point()+
     geom_node_text(aes(label=name), vjust =1, hjust=1)+
-    ggtitle("Bigram Network for Respondents who are SINGLE")
+    ggtitle("Token Network for Respondents who are SINGLE")
 
 # Not Single 
 bigram_graph2 <- bigram_counts0 %>%
@@ -264,7 +264,7 @@ notSingleBigram <- ggraph(bigram_graph2, layout = "fr") +
     geom_edge_link()+
     geom_node_point()+
     geom_node_text(aes(label=name), vjust =1, hjust=1)+
-    ggtitle("Bigram Network for Respondents who are NOT SINGLE")
+    ggtitle("Token Network for Respondents who are NOT SINGLE")
 
 
 l_bigram = list(single = list(bigram_counts1, singleBigram),

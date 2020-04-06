@@ -450,7 +450,19 @@ naive_df$goal %>% str()
 #building the Naive Bayes model:
 # NB_classifier <- textmodel_nb(msg.dfm.train, goal[c(1:123)])
 NB_classifier <- textmodel_nb(msg.dfm.train, naive_df[c(1:c(nrow(msg.dfm)-test_rows)),'goal'])
+# NB_test <- predict(NB_classifier, msg.dfm.test , force = TRUE)
 summary(NB_classifier)
+
+# Evaluating Model 
+
+actual_class <- tail(naive_df,5)['goal']
+predicted_class <-predict(NB_classifier, msg.dfm.test)
+tab_class <- table(actual_class, predicted_class)
+tab_class
+
+confusionMatrix(tab_class, mode = "everything")
+
+
 
 # Put the probability of each words in a dataframe
 word_prob <- NB_classifier[[3]]
@@ -482,12 +494,14 @@ wordcloud2(forWordCloud2,
            shuffle = FALSE, 
            shape = 'cardioid')
 
-?wordcloud2
+
 # predicting the testing data
 pred <- predict(NB_classifier, msg.dfm.test)
 
-opinions = Corpus(VectorSource('I like pina colada'))
+opinions = Corpus(VectorSource('beer husband'))
 userInputDfm <- dfm(corpus(opinions), tolower = TRUE)
+predict(NB_classifier, userInputDfm, force = TRUE, type = 'prob')
+
 pred<- predict(NB_classifier, userInputDfm, force = TRUE)
 
 ifelse(pred == '0', 'Taken :(', 'SINGLE!!! :)')

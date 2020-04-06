@@ -42,8 +42,8 @@ ui <- dashboardPage(
                         box(width = 10, background = "light-blue",
                             "The candidate for love is required to answer at least 1 of the following questions "
                          )),
-                    verticalLayout(box('1. How often do yo go out?',width = 5, background = "green"),
-                             box('2. What do yo do on your free time?',width = 5, background = "green"),
+                    verticalLayout(box('1. How often do you go out?',width = 5, background = "green"),
+                             box('2. What do you do on your free time?',width = 5, background = "green"),
                              box('3. How is your relationship with your parents?',width = 5, background = "green"),
                              box('4. What is your Ideal Vacation?',width = 5, background = "green"),
                              box('5. What is your typical evening?',width = 5, background = "green"))
@@ -92,7 +92,7 @@ ui <- dashboardPage(
                                           label = h3("Enter in the textbox the love candidate responses"), 
                                           value = "Enter text..."), 
                     valueBox(
-                        uiOutput("bayes"), "New Orders", icon = icon("heart"),
+                        uiOutput("bayes"), "Model Prediction", icon = icon("heart"),
                         href = "https://www.facebook.com/abdul.bishar"
                     ))),
             
