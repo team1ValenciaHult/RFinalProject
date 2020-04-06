@@ -1,3 +1,7 @@
+## Live App
+
+https://dataminingapps.shinyapps.io/NLPLove/
+
 ## About the app
 
 This Shiny App focuses on solving the following problem: 
